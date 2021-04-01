@@ -1,0 +1,23 @@
+{
+  "name": "ellinaut/ellirpc-bundle",
+  "description": "Symfony integration for ellinaut/ellirpc",
+  "type": "symfony-bundle",
+  "require": {
+    "php": ">=7.4",
+    "symfony/framework-bundle": "^5.0",
+    "ellinaut/ellirpc": "dev-main@dev"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Philipp Marien",
+      "email": "p.mhilipp@ellinaut.dev"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "Ellinaut\\ElliRPCBundle\\": "src"
+    }
+  }
+}
