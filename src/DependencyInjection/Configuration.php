@@ -58,13 +58,13 @@ class Configuration implements ConfigurationInterface
             ->useAttributeAsKey('name')
             ->scalarPrototype();
 
-        $response = $procedure->arrayNode('response')->defaultNull();
+        $response = $procedure->arrayNode('response');
         $this->appendSchemaReferenceDefinition($response);
 
         $schema->scalarNode('name')->isRequired()->cannotBeEmpty();
         $schema->booleanNode('abstract')->defaultFalse();
         $this->appendSchemaReferenceDefinition($schema->arrayNode('extends'));
-        $schema->scalarNode('description')->defaultNull();
+        $schema->scalarNode('description');
 
         $property = $schema->arrayNode('properties')
             ->useAttributeAsKey('name')
@@ -72,11 +72,11 @@ class Configuration implements ConfigurationInterface
             ->children();
 
         $property->scalarNode('name')->isRequired()->cannotBeEmpty();
-        $property->scalarNode('description')->defaultNull();
+        $property->scalarNode('description');
 
         $type = $property->arrayNode('type')->isRequired()->children();
 
-        $type->scalarNode('context')->defaultNull();
+        $type->scalarNode('context');
         $type->scalarNode('type')->isRequired()->cannotBeEmpty();
         $type->arrayNode('options')->scalarPrototype();
 
@@ -102,7 +102,7 @@ class Configuration implements ConfigurationInterface
     protected function appendSchemaReferenceDefinition(ArrayNodeDefinition $definition): void
     {
         $schemaReference = $definition->children();
-        $schemaReference->scalarNode('context')->defaultNull();
+        $schemaReference->scalarNode('context');
         $schemaReference->scalarNode('schema')->isRequired()->cannotBeEmpty();
     }
 }
