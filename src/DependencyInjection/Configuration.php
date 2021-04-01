@@ -48,10 +48,10 @@ class Configuration implements ConfigurationInterface
         $procedure->arrayNode('methods')->isRequired()->scalarPrototype();
         $procedure->arrayNode('contentTypes')->isRequired()->scalarPrototype();
 
-        $request = $procedure->arrayNode('request')->defaultNull();
+        $request = $procedure->arrayNode('request');
         $this->appendDataDefinition($request);
 
-        $paginatedBy = $request->children()->arrayNode('paginatedBy')->defaultNull();
+        $paginatedBy = $request->children()->arrayNode('paginatedBy');
         $this->appendSchemaReferenceDefinition($paginatedBy);
 
         $request->children()->arrayNode('sortedBy')
