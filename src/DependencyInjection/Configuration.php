@@ -62,7 +62,7 @@ class Configuration implements ConfigurationInterface
         $this->appendSchemaReferenceDefinition($response);
 
         $schema->scalarNode('name')->isRequired()->cannotBeEmpty();
-        $schema->booleanNode('abstract')->defaultFalse();
+        $schema->booleanNode('abstract');
         $this->appendSchemaReferenceDefinition($schema->arrayNode('extends'));
         $schema->scalarNode('description');
 
