@@ -55,7 +55,6 @@ class Configuration implements ConfigurationInterface
         $this->appendSchemaReferenceDefinition($paginatedBy);
 
         $request->children()->arrayNode('sortedBy')
-            ->defaultNull()
             ->useAttributeAsKey('name')
             ->scalarPrototype();
 
@@ -93,7 +92,7 @@ class Configuration implements ConfigurationInterface
 
         $data = $definition->children();
 
-        $wrappedBy = $data->arrayNode('wrappedBy')->defaultNull();
+        $wrappedBy = $data->arrayNode('wrappedBy');
         $this->appendSchemaReferenceDefinition($wrappedBy);
     }
 
