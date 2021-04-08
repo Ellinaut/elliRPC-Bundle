@@ -45,6 +45,20 @@ class Configuration implements ConfigurationInterface
     {
         $package = $builder->arrayNode('packages')
             ->useAttributeAsKey('name')
+            ->validate()
+            ->always()
+            ->then(static function ($v) {
+                $normalized = [];
+                foreach ($v as $key => $value) {
+                    $normalized[] = array_merge(
+                        ['name' => $key],
+                        $value
+                    );
+                }
+
+                return $normalized;
+            })
+            ->end()
             ->arrayPrototype()
             ->children();
 
@@ -52,6 +66,20 @@ class Configuration implements ConfigurationInterface
 
         $procedure = $package->arrayNode('procedures')
             ->useAttributeAsKey('name')
+            ->validate()
+            ->always()
+            ->then(static function ($v) {
+                $normalized = [];
+                foreach ($v as $key => $value) {
+                    $normalized[] = array_merge(
+                        ['name' => $key],
+                        $value
+                    );
+                }
+
+                return $normalized;
+            })
+            ->end()
             ->arrayPrototype()
             ->children();
 
@@ -100,6 +128,20 @@ class Configuration implements ConfigurationInterface
     {
         $schema = $builder->arrayNode('schemas')
             ->useAttributeAsKey('name')
+            ->validate()
+            ->always()
+            ->then(static function ($v) {
+                $normalized = [];
+                foreach ($v as $key => $value) {
+                    $normalized[] = array_merge(
+                        ['name' => $key],
+                        $value
+                    );
+                }
+
+                return $normalized;
+            })
+            ->end()
             ->arrayPrototype()
             ->children();
 
@@ -124,6 +166,20 @@ class Configuration implements ConfigurationInterface
 
         $property = $schema->arrayNode('properties')
             ->useAttributeAsKey('name')
+            ->validate()
+            ->always()
+            ->then(static function ($v) {
+                $normalized = [];
+                foreach ($v as $key => $value) {
+                    $normalized[] = array_merge(
+                        ['name' => $key],
+                        $value
+                    );
+                }
+
+                return $normalized;
+            })
+            ->end()
             ->arrayPrototype()
             ->children();
 
