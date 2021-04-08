@@ -24,16 +24,15 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('ellirpc');
         $root = $treeBuilder->getRootNode()->children();
 
+        $fileStorage = $root->arrayNode('fileStorage')->addDefaultsIfNotSet()->children();
+        $fileStorage->scalarNode('directory')->defaultValue('%kernel.project_dir%/public/elliRpc');
+        $fileStorage->integerNode('mode')->defaultValue(755);
+
         $definition = $root->arrayNode('definition')->children();
-
         $definition->scalarNode('application')->cannotBeEmpty()->isRequired();
-
         $definition->arrayNode('contentTypes')->defaultValue(['json'])->scalarPrototype();
-
         $definition->scalarNode('description')->defaultNull();
-
         $this->addPackageConfigurations($definition);
-
         $this->addSchemaConfigurations($definition);
 
         return $treeBuilder;
