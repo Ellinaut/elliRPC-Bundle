@@ -56,6 +56,7 @@ use Ellinaut\ElliRPC\ResponseFactory\ProcedureExecutionJsonResponseFactory;
 use Ellinaut\ElliRPC\ResponseFactory\ResponseFactoryInterface;
 use Ellinaut\ElliRPC\ResponseFactory\ResponseFactoryRegistry;
 use Ellinaut\ElliRPC\Server;
+use Ellinaut\ElliRPCBundle\Controller\RPCController;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
@@ -96,6 +97,10 @@ class ElliRPCExtension extends ConfigurableExtension
 
         $container->autowire(Server::class)
             ->setPublic(false);
+
+        $container->autowire(RPCController::class)
+            ->addTag('controller.service_arguments')
+            ->setPublic(true);
     }
 
     /**

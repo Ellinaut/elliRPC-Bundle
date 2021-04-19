@@ -6,7 +6,7 @@
     "php": ">=7.4",
     "symfony/framework-bundle": "^5.0",
     "ellinaut/ellirpc": "dev-main@dev",
-    "symfony/psr-http-message-bridge": "^2.1"
+    "sensio/framework-extra-bundle": "^5.0|^6.0"
   },
   "license": "MIT",
   "authors": [

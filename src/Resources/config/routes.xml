@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+        https://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="elliRPC.definitions.application"
+           path="/elliRPC/@definitions/application.{contentType}"
+           methods="GET"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    />
+
+    <route id="elliRPC.definitions.packages"
+           path="/elliRPC/@definitions/packages.{contentType}"
+           methods="GET"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    />
+
+    <route id="elliRPC.definitions.package"
+           path="/elliRPC/@definitions/packages/{packageName}.{contentType}"
+           methods="GET"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    />
+
+    <route id="elliRPC.definitions.schemas"
+           path="/elliRPC/@definitions/schemas.{contentType}"
+           methods="GET"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    />
+
+    <route id="elliRPC.definitions.schema"
+           path="/elliRPC/@definitions/schemas/{schemaName}.{contentType}"
+           methods="GET"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    />
+
+    <route id="elliRPC.procedures.executeBulk"
+           path="/elliRPC/@procedures/executeBulk.json"
+           methods="POST"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    />
+
+    <route id="elliRPC.procedures.execute"
+           path="/elliRPC/@procedures/{packageName}/{procedureName}.{contentType}"
+           methods="GET,POST"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    />
+
+    <route id="elliRPC.transactions.execute"
+           path="/elliRPC/@transactions/execute.json"
+           methods="POST"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    />
+
+    <route id="elliRPC.files.get"
+           path="/elliRPC/@files/{file}"
+           methods="GET"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    >
+        <requirement key="file">.+</requirement>
+    </route>
+
+    <route id="elliRPC.files.create"
+           path="/elliRPC/@files/{file}"
+           methods="POST"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    >
+        <requirement key="file">.+</requirement>
+    </route>
+
+
+    <route id="elliRPC.files.update"
+           path="/elliRPC/@files/{file}"
+           methods="PUT"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    >
+        <requirement key="file">.+</requirement>
+    </route>
+
+
+    <route id="elliRPC.files.delete"
+           path="/elliRPC/@files/{file}"
+           methods="DELETE"
+           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    >
+        <requirement key="file">.+</requirement>
+    </route>
+
+</routes>
