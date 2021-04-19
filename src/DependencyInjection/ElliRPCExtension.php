@@ -57,6 +57,10 @@ use Ellinaut\ElliRPC\ResponseFactory\ResponseFactoryInterface;
 use Ellinaut\ElliRPC\ResponseFactory\ResponseFactoryRegistry;
 use Ellinaut\ElliRPC\Server;
 use Ellinaut\ElliRPCBundle\Controller\RPCController;
+use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
+use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
@@ -94,6 +98,8 @@ class ElliRPCExtension extends ConfigurableExtension
         $this->addProcessors($container);
 
         $this->addResponseFactories($container);
+
+        $this->addPsrHttpMessageBridge($container);
 
         $container->autowire(Server::class)
             ->setPublic(false);
@@ -285,5 +291,31 @@ class ElliRPCExtension extends ConfigurableExtension
         $container->autowire(ProcedureExecutionJsonResponseFactory::class)
             ->setPublic(false)
             ->addTag('ellirpc.response_factory');
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    protected function addPsrHttpMessageBridge(ContainerBuilder $container): void
+    {
+        if (!$container->hasDefinition(HttpMessageFactoryInterface::class)) {
+            if (!$container->hasDefinition(PsrHttpFactory::class)) {
+                $container->autowire(PsrHttpFactory::class)
+                    ->setPublic(false);
+            }
+
+            $container->setAlias(HttpMessageFactoryInterface::class, PsrHttpFactory::class)
+                ->setPublic(false);
+        }
+
+        if (!$container->hasDefinition(HttpFoundationFactoryInterface::class)) {
+            if (!$container->hasDefinition(HttpFoundationFactory::class)) {
+                $container->autowire(HttpFoundationFactory::class)
+                    ->setPublic(false);
+            }
+
+            $container->setAlias(HttpFoundationFactoryInterface::class, HttpFoundationFactory::class)
+                ->setPublic(false);
+        }
     }
 }

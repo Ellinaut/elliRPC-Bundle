@@ -3,8 +3,10 @@
 namespace Ellinaut\ElliRPCBundle\Controller;
 
 use Ellinaut\ElliRPC\Server;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
+use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Philipp Marien
@@ -12,24 +14,45 @@ use Psr\Http\Message\ServerRequestInterface;
 class RPCController
 {
     /**
+     * @var HttpMessageFactoryInterface
+     */
+    private HttpMessageFactoryInterface $httpFactory;
+
+    /**
+     * @var HttpFoundationFactoryInterface
+     */
+    private HttpFoundationFactoryInterface $foundationFactory;
+
+    /**
      * @var Server
      */
     private Server $rpcServer;
 
     /**
+     * @param HttpMessageFactoryInterface $httpFactory
+     * @param HttpFoundationFactoryInterface $foundationFactory
      * @param Server $rpcServer
      */
-    public function __construct(Server $rpcServer)
-    {
+    public function __construct(
+        HttpMessageFactoryInterface $httpFactory,
+        HttpFoundationFactoryInterface $foundationFactory,
+        Server $rpcServer
+    ) {
+        $this->httpFactory = $httpFactory;
+        $this->foundationFactory = $foundationFactory;
         $this->rpcServer = $rpcServer;
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
+     * @param Request $request
+     * @return Response
      */
-    public function handleRPCRequest(ServerRequestInterface $request): ResponseInterface
+    public function handleRPCRequest(Request $request): Response
     {
-        return $this->rpcServer->handleRequest($request);
+        return $this->foundationFactory->createResponse(
+            $this->rpcServer->handleRequest(
+                $this->httpFactory->createRequest($request)
+            )
+        );
     }
 }
