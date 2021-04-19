@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ellinaut/PHP-elliRPC.git",
-                "reference": "bd93d354e713005a26a1b57f0f7401ddfaa16ef3"
+                "reference": "1fd7ff102a7802b6eb3eab1fb3bdd6ca8321e620"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ellinaut/PHP-elliRPC/zipball/bd93d354e713005a26a1b57f0f7401ddfaa16ef3",
-                "reference": "bd93d354e713005a26a1b57f0f7401ddfaa16ef3",
+                "url": "https://api.github.com/repos/Ellinaut/PHP-elliRPC/zipball/1fd7ff102a7802b6eb3eab1fb3bdd6ca8321e620",
+                "reference": "1fd7ff102a7802b6eb3eab1fb3bdd6ca8321e620",
                 "shasum": ""
             },
             "require": {
@@ -48,7 +48,7 @@
                 "issues": "https://github.com/Ellinaut/PHP-elliRPC/issues",
                 "source": "https://github.com/Ellinaut/PHP-elliRPC/tree/main"
             },
-            "time": "2021-04-08T20:54:10+00:00"
+            "time": "2021-04-19T21:49:02+00:00"
         },
         {
             "name": "psr/cache",

@@ -276,10 +276,6 @@ class ElliRPCExtension extends ConfigurableExtension
             ->setPublic(false)
             ->addTag('ellirpc.response_factory');
 
-        $container->autowire(ExceptionJsonResponseFactory::class)
-            ->setPublic(false)
-            ->addTag('ellirpc.response_factory');
-
         $container->autowire(FileResponseFactory::class)
             ->setPublic(false)
             ->addTag('ellirpc.response_factory');
