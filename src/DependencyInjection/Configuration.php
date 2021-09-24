@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('ellirpc');
+        $treeBuilder = new TreeBuilder('elli_rpc');
         $root = $treeBuilder->getRootNode()->children();
 
         $fileStorage = $root->arrayNode('fileStorage')->addDefaultsIfNotSet()->children();

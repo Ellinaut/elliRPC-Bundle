@@ -24,7 +24,7 @@ class ResponseFactoryPass extends AbstractCompilerPass
      */
     protected function getTagName(): string
     {
-        return 'ellirpc.response_factory';
+        return 'elli_rpc.response_factory';
     }
 
     /**

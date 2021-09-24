@@ -31,8 +31,8 @@ use Ellinaut\ElliRPC\Definition\Provider\ArrayDefinitionProvider;
 use Ellinaut\ElliRPC\Definition\Provider\DefinitionProviderInterface;
 use Ellinaut\ElliRPC\FileHandler\FileHandlerInterface;
 use Ellinaut\ElliRPC\FileHandler\PhpFileHandler;
-use Ellinaut\ElliRPC\Processor\ProcessorInterface;
-use Ellinaut\ElliRPC\Processor\ProcessorRegistry;
+use Ellinaut\ElliRPC\Procedure\ProcessorInterface;
+use Ellinaut\ElliRPC\Procedure\ProcessorRegistry;
 use Ellinaut\ElliRPC\RequestParser\DefinitionRequestParser;
 use Ellinaut\ElliRPC\RequestParser\FileRequestParser;
 use Ellinaut\ElliRPC\RequestParser\ProcedureExecutionBulkRequestParser;
@@ -49,7 +49,6 @@ use Ellinaut\ElliRPC\RequestProcessor\RequestProcessorInterface;
 use Ellinaut\ElliRPC\RequestProcessor\RequestProcessorRegistry;
 use Ellinaut\ElliRPC\RequestProcessor\TransactionExecutionProcessor;
 use Ellinaut\ElliRPC\ResponseFactory\DefinitionJsonResponseFactory;
-use Ellinaut\ElliRPC\ResponseFactory\ExceptionJsonResponseFactory;
 use Ellinaut\ElliRPC\ResponseFactory\FileResponseFactory;
 use Ellinaut\ElliRPC\ResponseFactory\ProcedureBulkJsonResponseFactory;
 use Ellinaut\ElliRPC\ResponseFactory\ProcedureExecutionJsonResponseFactory;
@@ -274,19 +273,19 @@ class ElliRPCExtension extends ConfigurableExtension
 
         $container->autowire(DefinitionJsonResponseFactory::class)
             ->setPublic(false)
-            ->addTag('ellirpc.response_factory');
+            ->addTag('elli_rpc.response_factory');
 
         $container->autowire(FileResponseFactory::class)
             ->setPublic(false)
-            ->addTag('ellirpc.response_factory');
+            ->addTag('elli_rpc.response_factory');
 
         $container->autowire(ProcedureBulkJsonResponseFactory::class)
             ->setPublic(false)
-            ->addTag('ellirpc.response_factory');
+            ->addTag('elli_rpc.response_factory');
 
         $container->autowire(ProcedureExecutionJsonResponseFactory::class)
             ->setPublic(false)
-            ->addTag('ellirpc.response_factory');
+            ->addTag('elli_rpc.response_factory');
     }
 
     /**

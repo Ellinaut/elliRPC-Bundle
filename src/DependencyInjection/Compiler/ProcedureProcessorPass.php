@@ -24,7 +24,7 @@ class ProcedureProcessorPass extends AbstractCompilerPass
      */
     protected function getTagName(): string
     {
-        return 'ellirpc.procedure_processor';
+        return 'elli_rpc.procedure_processor';
     }
 
     /**

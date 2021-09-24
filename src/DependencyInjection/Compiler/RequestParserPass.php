@@ -24,7 +24,7 @@ class RequestParserPass extends AbstractCompilerPass
      */
     protected function getTagName(): string
     {
-        return 'ellirpc.request_parser';
+        return 'elli_rpc.request_parser';
     }
 
     /**
