@@ -2,7 +2,7 @@
 
 namespace Ellinaut\ElliRPCBundle\DependencyInjection\Compiler;
 
-use Ellinaut\ElliRPC\Processor\ProcessorRegistry;
+use Ellinaut\ElliRPC\Procedure\ProcessorRegistry;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
