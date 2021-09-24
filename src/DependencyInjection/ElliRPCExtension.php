@@ -171,23 +171,23 @@ class ElliRPCExtension extends ConfigurableExtension
 
         $container->autowire(DefinitionRequestParser::class)
             ->setPublic(false)
-            ->addTag('ellirpc.request_parser', ['priority' => 0]);
+            ->addTag('elli_rpc.request_parser', ['priority' => 0]);
 
         $container->autowire(ProcedureExecutionRequestParser::class)
             ->setPublic(false)
-            ->addTag('ellirpc.request_parser', ['priority' => 1]);
+            ->addTag('elli_rpc.request_parser', ['priority' => 1]);
 
         $container->autowire(ProcedureExecutionBulkRequestParser::class)
             ->setPublic(false)
-            ->addTag('ellirpc.request_parser', ['priority' => 2]);
+            ->addTag('elli_rpc.request_parser', ['priority' => 2]);
 
         $container->autowire(TransactionsExecutionRequestParser::class)
             ->setPublic(false)
-            ->addTag('ellirpc.request_parser', ['priority' => 3]);
+            ->addTag('elli_rpc.request_parser', ['priority' => 3]);
 
         $container->autowire(FileRequestParser::class)
             ->setPublic(false)
-            ->addTag('ellirpc.request_parser', ['priority' => 4]);
+            ->addTag('elli_rpc.request_parser', ['priority' => 4]);
     }
 
     /**
@@ -202,50 +202,50 @@ class ElliRPCExtension extends ConfigurableExtension
         $container->autowire(DefinitionProcessor::class)
             ->setPublic(false)
             ->addTag(
-                'ellirpc.request_processor',
+                'elli_rpc.request_processor',
                 ['requestClass' => DocumentationRequest::class]
             )
             ->addTag(
-                'ellirpc.request_processor',
+                'elli_rpc.request_processor',
                 ['requestClass' => PackageDefinitionsRequest::class]
             )
             ->addTag(
-                'ellirpc.request_processor',
+                'elli_rpc.request_processor',
                 ['requestClass' => SchemaDefinitionRequest::class]
             );
 
         $container->autowire(FileDownloadProcessor::class)
             ->setPublic(false)
             ->addTag(
-                'ellirpc.request_processor',
+                'elli_rpc.request_processor',
                 ['requestClass' => FileDownloadRequest::class]
             );
 
         $container->autowire(FileUploadProcessor::class)
             ->setPublic(false)
             ->addTag(
-                'ellirpc.request_processor',
+                'elli_rpc.request_processor',
                 ['requestClass' => 4]
             );
 
         $container->autowire(ProcedureExecutionBulkProcessor::class)
             ->setPublic(false)
             ->addTag(
-                'ellirpc.request_processor',
+                'elli_rpc.request_processor',
                 ['requestClass' => ProcedureExecutionBulkRequest::class]
             );
 
         $container->autowire(ProcedureExecutionProcessor::class)
             ->setPublic(false)
             ->addTag(
-                'ellirpc.request_processor',
+                'elli_rpc.request_processor',
                 ['requestClass' => ProcedureExecutionRequest::class]
             );
 
         $container->autowire(TransactionExecutionProcessor::class)
             ->setPublic(false)
             ->addTag(
-                'ellirpc.request_processor',
+                'elli_rpc.request_processor',
                 ['requestClass' => TransactionExecutionRequest::class]
             );
     }
