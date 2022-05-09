@@ -43,7 +43,7 @@ class ElliRPCExtension extends ConfigurableExtension
 {
     public function getConfiguration(array $config, ContainerBuilder $container): Configuration
     {
-        return new Configuration($container->getParameter('%kernel.project_dir%'));
+        return new Configuration($container->getParameter('kernel.project_dir'));
     }
 
     /**
