@@ -2,6 +2,7 @@
 
 namespace Ellinaut\ElliRPCBundle;
 
+use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\DetectableProcedureProcessorPass;
 use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\ErrorFactoryPass;
 use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\ErrorTranslatorPass;
 use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\ProcedureProcessorPass;
@@ -21,6 +22,7 @@ class ElliRPCBundle extends Bundle
     public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new ProcedureProcessorPass());
+        $container->addCompilerPass(new DetectableProcedureProcessorPass());
         $container->addCompilerPass(new ProcedureValidatorPass());
         $container->addCompilerPass(new TransactionListenerPass());
         $container->addCompilerPass(new ErrorFactoryPass());
