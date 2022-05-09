@@ -19,13 +19,14 @@ use Ellinaut\ElliRPC\File\FileLocatorInterface;
 use Ellinaut\ElliRPC\File\FilesystemInterface;
 use Ellinaut\ElliRPC\FileHandler;
 use Ellinaut\ElliRPC\Procedure\Processor\ProcedureProcessorInterface;
-use Ellinaut\ElliRPC\Procedure\Processor\ProcedureProcessorRegistry;
 use Ellinaut\ElliRPC\Procedure\Transaction\TransactionListenerInterface;
 use Ellinaut\ElliRPC\Procedure\Transaction\TransactionManager;
 use Ellinaut\ElliRPC\Procedure\Transaction\TransactionManagerInterface;
 use Ellinaut\ElliRPC\Procedure\Validator\ProcedureValidatorChain;
 use Ellinaut\ElliRPC\Procedure\Validator\ProcedureValidatorInterface;
 use Ellinaut\ElliRPC\RPCHandler;
+use Ellinaut\ElliRPCBundle\Autoconfigure\DetectableProcedureProcessor;
+use Ellinaut\ElliRPCBundle\Autoconfigure\ProcedureProcessorRegistry;
 use Ellinaut\ElliRPCBundle\Controller\DefinitionController;
 use Ellinaut\ElliRPCBundle\Controller\FileController;
 use Ellinaut\ElliRPCBundle\Controller\ProcedureController;
@@ -65,11 +66,9 @@ class ElliRPCExtension extends ConfigurableExtension
             $container->setAlias(ProcedureValidatorInterface::class, ProcedureValidatorChain::class);
         }
 
-        $container->registerForAutoconfiguration(ProcedureProcessorInterface::class)
-            ->addTag('elli_rpc.procedure_processor');
-        $container->autowire(ProcedureProcessorRegistry::class)
-            ->setPublic(false)
-            ->clearTag('elli_rpc.procedure_processor');
+        $container->registerForAutoconfiguration(DetectableProcedureProcessor::class)
+            ->addTag('elli_rpc.procedure_processor.detected');
+        $container->autowire(ProcedureProcessorRegistry::class)->setPublic(false);
         if (!$container->hasDefinition(ProcedureProcessorInterface::class)) {
             $container->setAlias(ProcedureProcessorInterface::class, ProcedureProcessorRegistry::class);
         }

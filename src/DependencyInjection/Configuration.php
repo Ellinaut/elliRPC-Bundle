@@ -159,7 +159,7 @@ class Configuration implements ConfigurationInterface
         ###############################################
         ### Package >>> Errors
         ###############################################
-        $error = $root->arrayNode('errors')
+        $error = $package->arrayNode('errors')
             ->useAttributeAsKey('code')
             ->validate()
             ->always()

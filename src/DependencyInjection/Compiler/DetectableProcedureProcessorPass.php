@@ -2,22 +2,21 @@
 
 namespace Ellinaut\ElliRPCBundle\DependencyInjection\Compiler;
 
-use Ellinaut\ElliRPC\Procedure\Processor\ProcedureProcessorRegistry;
-use Ellinaut\ElliRPCBundle\Autoconfigure\DetectableProcedureProcessor;
+use Ellinaut\ElliRPCBundle\Autoconfigure\ProcedureProcessorRegistry;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Philipp Marien
  */
-class ProcedureProcessorPass extends AbstractCompilerPass
+class DetectableProcedureProcessorPass extends AbstractCompilerPass
 {
     /**
      * @return string
      */
     protected function getServiceId(): string
     {
-        return DetectableProcedureProcessor::class;
+        return ProcedureProcessorRegistry::class;
     }
 
     /**
@@ -25,7 +24,7 @@ class ProcedureProcessorPass extends AbstractCompilerPass
      */
     protected function getTagName(): string
     {
-        return 'elli_rpc.procedure_processor';
+        return 'elli_rpc.procedure_processor.detected';
     }
 
     /**
@@ -36,10 +35,8 @@ class ProcedureProcessorPass extends AbstractCompilerPass
     protected function modifyDefinition(Definition $definition, string $serviceId, array $config): void
     {
         $definition->addMethodCall(
-            'register',
+            'autoRegister',
             [
-                $config['package'],
-                $config['procedure'],
                 new Reference($serviceId),
             ]
         );
