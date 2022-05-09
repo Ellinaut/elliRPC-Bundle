@@ -3,8 +3,8 @@
   "description": "Symfony integration for ellinaut/ellirpc",
   "type": "symfony-bundle",
   "require": {
-    "php": ">=7.4",
-    "symfony/framework-bundle": "^5.0",
+    "php": ">=8.1",
+    "symfony/framework-bundle": "^5.0|^6.0",
     "ellinaut/ellirpc": "dev-main@dev",
     "symfony/psr-http-message-bridge": "^2.0"
   },
@@ -12,7 +12,7 @@
   "authors": [
     {
       "name": "Philipp Marien",
-      "email": "p.mhilipp@ellinaut.dev"
+      "email": "philipp@ellinaut.dev"
     }
   ],
   "minimum-stability": "stable",

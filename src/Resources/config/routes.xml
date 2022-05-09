@@ -4,84 +4,56 @@
         xsi:schemaLocation="http://symfony.com/schema/routing
         https://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="elliRPC.definitions.application"
-           path="/elliRPC/@definitions/application.{contentType}"
+    <route id="elliRPC.get_documentation"
+           path="/definitions"
            methods="GET"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+           controller="Ellinaut\ElliRPCBundle\Controller\DefinitionController::getDocumentation"
     />
 
-    <route id="elliRPC.definitions.packages"
-           path="/elliRPC/@definitions/packages.{contentType}"
+    <route id="elliRPC.get_package_definition"
+           path="/definitions/{packageName}"
            methods="GET"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+           controller="Ellinaut\ElliRPCBundle\Controller\DefinitionController::getPackageDefinition"
     />
 
-    <route id="elliRPC.definitions.package"
-           path="/elliRPC/@definitions/packages/{packageName}.{contentType}"
-           methods="GET"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
-    />
-
-    <route id="elliRPC.definitions.schemas"
-           path="/elliRPC/@definitions/schemas.{contentType}"
-           methods="GET"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
-    />
-
-    <route id="elliRPC.definitions.schema"
-           path="/elliRPC/@definitions/schemas/{schemaName}.{contentType}"
-           methods="GET"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
-    />
-
-    <route id="elliRPC.procedures.executeBulk"
-           path="/elliRPC/@procedures/executeBulk.json"
+    <route id="elliRPC.execute_procedure"
+           path="/procedures/execute"
            methods="POST"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+           controller="Ellinaut\ElliRPCBundle\Controller\ProcedureController::executeProcedure"
     />
 
-    <route id="elliRPC.procedures.execute"
-           path="/elliRPC/@procedures/{packageName}/{procedureName}.{contentType}"
-           methods="GET,POST"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
-    />
-
-    <route id="elliRPC.transactions.execute"
-           path="/elliRPC/@transactions/execute.json"
+    <route id="elliRPC.execute_bulk"
+           path="/procedures/bulk"
            methods="POST"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+           controller="Ellinaut\ElliRPCBundle\Controller\ProcedureController::executeBulk"
     />
 
-    <route id="elliRPC.files.get"
-           path="/elliRPC/@files/{file}"
+    <route id="elliRPC.execute_transaction"
+           path="/procedures/transaction"
+           methods="POST"
+           controller="Ellinaut\ElliRPCBundle\Controller\ProcedureController::executeTransaction"
+    />
+
+    <route id="elliRPC.get_file"
+           path="/files/{fileName}"
            methods="GET"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+           controller="Ellinaut\ElliRPCBundle\Controller\FileController::getFile"
     >
         <requirement key="file">.+</requirement>
     </route>
 
-    <route id="elliRPC.files.create"
-           path="/elliRPC/@files/{file}"
-           methods="POST"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+    <route id="elliRPC.upload_file"
+           path="/files/{fileName}"
+           methods="POST|PUT"
+           controller="Ellinaut\ElliRPCBundle\Controller\FileController::uploadFile"
     >
         <requirement key="file">.+</requirement>
     </route>
 
-
-    <route id="elliRPC.files.update"
-           path="/elliRPC/@files/{file}"
-           methods="PUT"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
-    >
-        <requirement key="file">.+</requirement>
-    </route>
-
-
-    <route id="elliRPC.files.delete"
-           path="/elliRPC/@files/{file}"
+    <route id="elliRPC.delete_file"
+           path="/files/{fileName}"
            methods="DELETE"
-           controller="Ellinaut\ElliRPCBundle\Controller\RPCController::handleRPCRequest"
+           controller="Ellinaut\ElliRPCBundle\Controller\FileController::deleteFile"
     >
         <requirement key="file">.+</requirement>
     </route>

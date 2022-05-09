@@ -16,6 +16,10 @@ class Configuration implements ConfigurationInterface
 {
     protected const NODE_KEY = 'node';
 
+    public function __construct(private readonly string $projectDir)
+    {
+    }
+
     /**
      * @return TreeBuilder
      */
@@ -24,26 +28,15 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('elli_rpc');
         $root = $treeBuilder->getRootNode()->children();
 
-        $fileStorage = $root->arrayNode('fileStorage')->addDefaultsIfNotSet()->children();
-        $fileStorage->scalarNode('directory')->defaultValue('%kernel.project_dir%/public/elliRpc');
-        $fileStorage->integerNode('mode')->defaultValue(755);
+        $root->scalarNode('defaultFileStorage')->defaultValue($this->projectDir . '/public/elliRpc');
 
-        $definition = $root->arrayNode('definition')->children();
-        $definition->scalarNode('application')->cannotBeEmpty()->isRequired();
-        $definition->arrayNode('contentTypes')->defaultValue(['json'])->scalarPrototype();
-        $definition->scalarNode('description')->defaultNull();
-        $this->addPackageConfigurations($definition);
-        $this->addSchemaConfigurations($definition);
+        $root->scalarNode('application')->defaultValue('API');
+        $root->scalarNode('description')->defaultNull();
 
-        return $treeBuilder;
-    }
-
-    /**
-     * @param NodeBuilder $builder
-     */
-    protected function addPackageConfigurations(NodeBuilder $builder): void
-    {
-        $package = $builder->arrayNode('packages')
+        ###############################################
+        ### Package
+        ###############################################
+        $package = $root->arrayNode('packages')
             ->useAttributeAsKey('name')
             ->validate()
             ->always()
@@ -64,6 +57,9 @@ class Configuration implements ConfigurationInterface
 
         $package->scalarNode('description')->defaultNull();
 
+        ###############################################
+        ### Package >>> Procedures
+        ###############################################
         $procedure = $package->arrayNode('procedures')
             ->useAttributeAsKey('name')
             ->validate()
@@ -85,48 +81,18 @@ class Configuration implements ConfigurationInterface
 
         $procedure->scalarNode('description')->defaultNull();
 
-        $procedure->arrayNode('methods')
-            ->isRequired()
-            ->requiresAtLeastOneElement()
-            ->scalarPrototype()
-            ->validate()
-            ->ifNotInArray(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
-            ->thenInvalid('Invalid value for key "methods".');
+        $request = $procedure->arrayNode('request')->children();
+        $this->addTransportDefinition($request);
 
-        $procedure->arrayNode('contentTypes')->defaultValue(['json'])->scalarPrototype();
+        $response = $procedure->arrayNode('response')->children();
+        $this->addTransportDefinition($response);
 
-        $procedure->variableNode('request')
-            ->defaultNull()
-            ->beforeNormalization()
-            ->ifArray()
-            ->then(static function (array $value) {
-                return self::processNodeDefinition(self::getRequestNodeDefinition(), $value);
-            })
-            ->end()
-            ->validate()
-            ->ifTrue(static function ($value) {
-                return ($value !== null && !is_array($value));
-            })
-            ->thenInvalid('Invalid value for key "request".');
+        $procedure->arrayNode('errors')->scalarPrototype();
 
-        $procedure->variableNode('response')
-            ->defaultNull()
-            ->beforeNormalization()
-            ->ifArray()
-            ->then(static function (array $value) {
-                return self::processNodeDefinition(self::getDataNodeDefinition(), $value);
-            })
-            ->end()
-            ->validate()
-            ->ifTrue(static function ($value) {
-                return ($value !== null && !is_array($value));
-            })
-            ->thenInvalid('Invalid value for key "response".');
-    }
-
-    protected function addSchemaConfigurations(NodeBuilder $builder): void
-    {
-        $schema = $builder->arrayNode('schemas')
+        ###############################################
+        ### Package >>> Schemas
+        ###############################################
+        $schema = $package->arrayNode('schemas')
             ->useAttributeAsKey('name')
             ->validate()
             ->always()
@@ -144,7 +110,6 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->arrayPrototype()
             ->children();
-
 
         $schema->booleanNode('abstract')->defaultFalse();
 
@@ -190,6 +155,77 @@ class Configuration implements ConfigurationInterface
         $type->scalarNode('context')->defaultNull();
         $type->scalarNode('type')->isRequired()->cannotBeEmpty();
         $type->arrayNode('options')->scalarPrototype();
+
+        ###############################################
+        ### Package >>> Errors
+        ###############################################
+        $error = $root->arrayNode('errors')
+            ->useAttributeAsKey('code')
+            ->validate()
+            ->always()
+            ->then(static function ($v) {
+                $normalized = [];
+                foreach ($v as $key => $value) {
+                    $normalized[] = array_merge(
+                        ['code' => $key],
+                        $value
+                    );
+                }
+
+                return $normalized;
+            })
+            ->end()
+            ->arrayPrototype()
+            ->children();
+
+        $error->scalarNode('description')->defaultNull();
+
+        $error->variableNode('context')
+            ->defaultNull()
+            ->beforeNormalization()
+            ->ifArray()
+            ->then(static function (array $value) {
+                return self::processNodeDefinition(self::getSchemaReferenceNodeDefinition(), $value);
+            })
+            ->end()
+            ->validate()
+            ->ifTrue(static function ($value) {
+                return ($value !== null && !is_array($value));
+            })
+            ->thenInvalid('Invalid value for key "context".');
+
+        return $treeBuilder;
+    }
+
+    protected function addTransportDefinition(NodeBuilder $builder): void
+    {
+        $builder->variableNode('data')
+            ->defaultNull()
+            ->beforeNormalization()
+            ->ifArray()
+            ->then(static function (array $value) {
+                return self::processNodeDefinition(self::getDataNodeDefinition(), $value);
+            })
+            ->end()
+            ->validate()
+            ->ifTrue(static function ($value) {
+                return ($value !== null && !is_array($value));
+            })
+            ->thenInvalid('Invalid value for key "data".');
+
+        $builder->variableNode('meta')
+            ->defaultNull()
+            ->beforeNormalization()
+            ->ifArray()
+            ->then(static function (array $value) {
+                return self::processNodeDefinition(self::getSchemaReferenceNodeDefinition(), $value);
+            })
+            ->end()
+            ->validate()
+            ->ifTrue(static function ($value) {
+                return ($value !== null && !is_array($value));
+            })
+            ->thenInvalid('Invalid value for key "meta".');
     }
 
     /**
@@ -205,33 +241,6 @@ class Configuration implements ConfigurationInterface
     /**
      * @return ArrayNodeDefinition
      */
-    protected static function getRequestNodeDefinition(): ArrayNodeDefinition
-    {
-        $node = (new TreeBuilder(self::NODE_KEY))->getRootNode();
-
-        $nodeBuilder = $node->children();
-        $nodeBuilder->variableNode('data')
-            ->defaultNull()
-            ->beforeNormalization()
-            ->ifArray()
-            ->then(static function (array $value) {
-                return self::processNodeDefinition(self::getDataNodeDefinition(), $value);
-            });
-        $nodeBuilder->variableNode('paginatedBy')
-            ->defaultNull()
-            ->beforeNormalization()
-            ->ifArray()
-            ->then(static function (array $value) {
-                return self::processNodeDefinition(self::getSchemaReferenceNodeDefinition(), $value);
-            });
-        $nodeBuilder->arrayNode('sortedBy')->useAttributeAsKey('name')->scalarPrototype();
-
-        return $node;
-    }
-
-    /**
-     * @return ArrayNodeDefinition
-     */
     protected static function getDataNodeDefinition(): ArrayNodeDefinition
     {
         $nodeDefinition = self::getSchemaReferenceNodeDefinition();
@@ -242,6 +251,8 @@ class Configuration implements ConfigurationInterface
             ->then(static function (array $value) {
                 return self::processNodeDefinition(self::getSchemaReferenceNodeDefinition(), $value);
             });
+
+        $nodeDefinition->children()->booleanNode('nullable')->defaultFalse();
 
         return $nodeDefinition;
     }

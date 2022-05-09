@@ -2,21 +2,24 @@
 
 namespace Ellinaut\ElliRPCBundle\DependencyInjection\Compiler;
 
-use Ellinaut\ElliRPC\RequestProcessor\RequestProcessorRegistry;
+use Ellinaut\ElliRPC\Error\Factory\ErrorFactoryChain;
+use Ellinaut\ElliRPC\Error\Translator\ErrorTranslatorChain;
+use Ellinaut\ElliRPC\Procedure\Processor\ProcedureProcessorRegistry;
+use Ellinaut\ElliRPC\Procedure\Validator\ProcedureValidatorChain;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Philipp Marien
  */
-class RequestProcessorPass extends AbstractCompilerPass
+class ErrorTranslatorPass extends AbstractCompilerPass
 {
     /**
      * @return string
      */
     protected function getServiceId(): string
     {
-        return RequestProcessorRegistry::class;
+        return ErrorTranslatorChain::class;
     }
 
     /**
@@ -24,7 +27,7 @@ class RequestProcessorPass extends AbstractCompilerPass
      */
     protected function getTagName(): string
     {
-        return 'elli_rpc.request_processor';
+        return 'elli_rpc.error_translator';
     }
 
     /**
@@ -38,7 +41,6 @@ class RequestProcessorPass extends AbstractCompilerPass
             'register',
             [
                 new Reference($serviceId),
-                $config['requestClass']
             ]
         );
     }

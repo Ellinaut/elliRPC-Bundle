@@ -2,21 +2,22 @@
 
 namespace Ellinaut\ElliRPCBundle\DependencyInjection\Compiler;
 
-use Ellinaut\ElliRPC\ResponseFactory\ResponseFactoryRegistry;
+use Ellinaut\ElliRPC\Procedure\Processor\ProcedureProcessorRegistry;
+use Ellinaut\ElliRPC\Procedure\Validator\ProcedureValidatorChain;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Philipp Marien
  */
-class ResponseFactoryPass extends AbstractCompilerPass
+class ProcedureValidatorPass extends AbstractCompilerPass
 {
     /**
      * @return string
      */
     protected function getServiceId(): string
     {
-        return ResponseFactoryRegistry::class;
+        return ProcedureValidatorChain::class;
     }
 
     /**
@@ -24,7 +25,7 @@ class ResponseFactoryPass extends AbstractCompilerPass
      */
     protected function getTagName(): string
     {
-        return 'elli_rpc.response_factory';
+        return 'elli_rpc.procedure_validator';
     }
 
     /**
@@ -34,6 +35,11 @@ class ResponseFactoryPass extends AbstractCompilerPass
      */
     protected function modifyDefinition(Definition $definition, string $serviceId, array $config): void
     {
-        $definition->addMethodCall('register', [new Reference($serviceId)]);
+        $definition->addMethodCall(
+            'register',
+            [
+                new Reference($serviceId),
+            ]
+        );
     }
 }
