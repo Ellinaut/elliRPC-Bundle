@@ -60,9 +60,7 @@ class ElliRPCExtension extends ConfigurableExtension
         ##############################################################
         $container->registerForAutoconfiguration(ProcedureValidatorInterface::class)
             ->addTag('elli_rpc.procedure_validator');
-        $container->autowire(ProcedureValidatorChain::class)
-            ->setPublic(false)
-            ->clearTag('elli_rpc.procedure_validator');
+        $container->autowire(ProcedureValidatorChain::class)->setPublic(false);
         if (!$container->hasDefinition(ProcedureValidatorInterface::class)) {
             $container->setAlias(ProcedureValidatorInterface::class, ProcedureValidatorChain::class);
         }
@@ -84,20 +82,17 @@ class ElliRPCExtension extends ConfigurableExtension
 
         $container->registerForAutoconfiguration(ErrorFactoryInterface::class)
             ->addTag('elli_rpc.error_factory');
-        $container->autowire(ErrorFactoryChain::class)
-            ->setPublic(false)
-            ->clearTag('elli_rpc.error_factory');
+        $container->autowire(ErrorFactoryChain::class)->setPublic(false);
         if (!$container->hasDefinition(ErrorFactoryInterface::class)) {
             $container->setAlias(ErrorFactoryInterface::class, ErrorFactoryChain::class);
         }
 
-        $container->autowire(FileErrorFactory::class);
+        $container->autowire(FileErrorFactory::class)
+            ->addTag('elli_rpc.error_factory');
 
         $container->registerForAutoconfiguration(ErrorTranslatorInterface::class)
             ->addTag('elli_rpc.error_translator');
-        $container->autowire(ErrorTranslatorChain::class)
-            ->setPublic(false)
-            ->clearTag('elli_rpc.error_translator');
+        $container->autowire(ErrorTranslatorChain::class)->setPublic(false);
         if (!$container->hasDefinition(ErrorTranslatorInterface::class)) {
             $container->setAlias(ErrorTranslatorInterface::class, ErrorTranslatorChain::class);
         }
