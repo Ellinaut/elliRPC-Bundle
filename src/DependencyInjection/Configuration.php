@@ -28,7 +28,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('elli_rpc');
         $root = $treeBuilder->getRootNode()->children();
 
-        $root->scalarNode('defaultFileStorage')->defaultValue($this->projectDir . '/public/elliRpc');
+        $root->scalarNode('defaultFileStorage')->defaultValue($this->projectDir . '/assets/elliRPC');
 
         $root->scalarNode('application')->defaultValue('API');
         $root->scalarNode('description')->defaultNull();
