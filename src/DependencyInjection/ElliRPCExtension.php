@@ -9,6 +9,7 @@ use Ellinaut\ElliRPC\Definition\Loader\SchemaDefinitionLoaderInterface;
 use Ellinaut\ElliRPC\DefinitionHandler;
 use Ellinaut\ElliRPC\Error\Factory\ErrorFactoryChain;
 use Ellinaut\ElliRPC\Error\Factory\ErrorFactoryInterface;
+use Ellinaut\ElliRPC\Error\Factory\FileErrorFactory;
 use Ellinaut\ElliRPC\Error\Translator\ErrorTranslatorChain;
 use Ellinaut\ElliRPC\Error\Translator\ErrorTranslatorInterface;
 use Ellinaut\ElliRPC\File\Bridge\SymfonyContentTypeGuesser;
@@ -89,6 +90,8 @@ class ElliRPCExtension extends ConfigurableExtension
         if (!$container->hasDefinition(ErrorFactoryInterface::class)) {
             $container->setAlias(ErrorFactoryInterface::class, ErrorFactoryChain::class);
         }
+
+        $container->autowire(FileErrorFactory::class);
 
         $container->registerForAutoconfiguration(ErrorTranslatorInterface::class)
             ->addTag('elli_rpc.error_translator');
