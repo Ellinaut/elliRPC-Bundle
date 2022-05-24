@@ -2,8 +2,7 @@
 
 namespace Ellinaut\ElliRPCBundle\DependencyInjection\Compiler;
 
-use Ellinaut\ElliRPC\Procedure\Processor\ProcedureProcessorRegistry;
-use Ellinaut\ElliRPCBundle\Autoconfigure\DetectableProcedureProcessor;
+use Ellinaut\ElliRPCBundle\Autoconfigure\ProcedureProcessorRegistry;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -17,7 +16,7 @@ class ProcedureProcessorPass extends AbstractCompilerPass
      */
     protected function getServiceId(): string
     {
-        return DetectableProcedureProcessor::class;
+        return ProcedureProcessorRegistry::class;
     }
 
     /**

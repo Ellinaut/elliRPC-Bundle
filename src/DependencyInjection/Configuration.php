@@ -2,6 +2,7 @@
 
 namespace Ellinaut\ElliRPCBundle\DependencyInjection;
 
+use Ellinaut\ElliRPC\Procedure\ExecutionContext;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
@@ -91,7 +92,12 @@ class Configuration implements ConfigurationInterface
 
         $procedure->arrayNode('errors')->scalarPrototype();
 
-        $procedure->enumNode('allowedUsage')->values(['TRANSACTION', 'STANDALONE'])->defaultNull();
+        $procedure->enumNode('allowedUsage')
+            ->values([
+                ExecutionContext::TRANSACTION->value,
+                ExecutionContext::STANDALONE->value,
+            ])
+            ->defaultNull();
 
         ###############################################
         ### Package >>> Schemas
