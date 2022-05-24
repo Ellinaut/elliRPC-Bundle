@@ -91,6 +91,8 @@ class Configuration implements ConfigurationInterface
 
         $procedure->arrayNode('errors')->scalarPrototype();
 
+        $procedure->enumNode('allowedUsage')->values(['TRANSACTION', 'STANDALONE'])->defaultNull();
+
         ###############################################
         ### Package >>> Schemas
         ###############################################
