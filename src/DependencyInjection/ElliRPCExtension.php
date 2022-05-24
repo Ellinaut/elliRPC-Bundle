@@ -31,6 +31,7 @@ use Ellinaut\ElliRPCBundle\Autoconfigure\ProcedureProcessorRegistry;
 use Ellinaut\ElliRPCBundle\Controller\DefinitionController;
 use Ellinaut\ElliRPCBundle\Controller\FileController;
 use Ellinaut\ElliRPCBundle\Controller\ProcedureController;
+use Ellinaut\ElliRPCBundle\Listener\AccessControlAllowOriginListener;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
@@ -172,6 +173,14 @@ class ElliRPCExtension extends ConfigurableExtension
             $container->setAlias(HttpFoundationFactoryInterface::class, HttpFoundationFactory::class)
                 ->setPublic(false);
         }
+
+        ##############################################################
+        ### Symfony Event Listener
+        ##############################################################
+        $container->autowire(AccessControlAllowOriginListener::class)
+            ->setArgument('$allowedOrigins', $mergedConfig['allowOrigin'])
+            ->addTag('kernel.event_listener', ['name' => 'kernel.response', 'method' => 'onKernelResponse'])
+            ->setPublic(true);
 
         ##############################################################
         ### Symfony Controller
