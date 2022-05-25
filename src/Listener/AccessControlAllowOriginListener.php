@@ -24,6 +24,15 @@ class AccessControlAllowOriginListener
         foreach ($this->allowedOrigins as $allowedOrigin) {
             if ($allowedOrigin === '*' || $origin === $allowedOrigin) {
                 $event->getResponse()->headers->set('Access-Control-Allow-Origin', $origin);
+                $event->getResponse()->headers->set('Access-Control-Allow-Credentials', 'true');
+                $event->getResponse()->headers->set(
+                    'Access-Control-Allow-Methods',
+                    'GET,HEAD,OPTIONS,POST,PUT,DELETE'
+                );
+                $event->getResponse()->headers->set(
+                    'Access-Control-Allow-Headers',
+                    implode(', ', $event->getRequest()->headers->keys())
+                );
                 break;
             }
         }
