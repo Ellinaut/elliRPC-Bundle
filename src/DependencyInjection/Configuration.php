@@ -31,7 +31,7 @@ class Configuration implements ConfigurationInterface
 
         $root->scalarNode('defaultFileStorage')->defaultValue($this->projectDir . '/assets/elliRPC');
 
-        $root->arrayNode('allowOrigin')->defaultValue([])->scalarPrototype();
+        $root->booleanNode('allowCORS')->defaultFalse();
 
         $root->scalarNode('application')->defaultValue('API');
         $root->scalarNode('description')->defaultNull();

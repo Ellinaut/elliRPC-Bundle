@@ -177,10 +177,11 @@ class ElliRPCExtension extends ConfigurableExtension
         ##############################################################
         ### Symfony Event Listener
         ##############################################################
-        $container->autowire(AccessControlAllowOriginListener::class)
-            ->setArgument('$allowedOrigins', $mergedConfig['allowOrigin'])
-            ->addTag('kernel.event_listener', ['name' => 'kernel.response', 'method' => 'onKernelResponse'])
-            ->setPublic(true);
+        if ($mergedConfig['allowCORS']) {
+            $container->autowire(AccessControlAllowOriginListener::class)
+                ->addTag('kernel.event_listener', ['name' => 'kernel.response', 'method' => 'onKernelResponse'])
+                ->setPublic(true);
+        }
 
         ##############################################################
         ### Symfony Controller
