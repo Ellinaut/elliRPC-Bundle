@@ -59,6 +59,7 @@ class Configuration implements ConfigurationInterface
             ->children();
 
         $package->scalarNode('description')->defaultNull();
+        $package->scalarNode('fallbackLanguage')->defaultNull();
 
         ###############################################
         ### Package >>> Procedures
