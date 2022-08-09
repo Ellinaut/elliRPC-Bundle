@@ -108,6 +108,8 @@ class ElliRPCExtension extends ConfigurableExtension
         $container->registerForAutoconfiguration(ChainableFileLocator::class)
             ->addTag('elli_rpc.file_locator');
 
+        $container->setParameter('elli_rpc.files.local_path', $mergedConfig['files']['localPath']);
+
         if (!$container->hasDefinition(FileLocatorInterface::class)) {
             if ($mergedConfig['files']['localPath']) {
                 $container->autowire(LocalPathLocator::class)
