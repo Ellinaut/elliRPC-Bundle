@@ -17,10 +17,6 @@ class Configuration implements ConfigurationInterface
 {
     protected const NODE_KEY = 'node';
 
-    public function __construct(private readonly string $projectDir)
-    {
-    }
-
     /**
      * @return TreeBuilder
      */
@@ -29,7 +25,8 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('elli_rpc');
         $root = $treeBuilder->getRootNode()->children();
 
-        $root->scalarNode('defaultFileStorage')->defaultValue($this->projectDir . '/assets/elliRPC');
+        $root->booleanNode('enableFileStorage')->defaultFalse();
+        $root->scalarNode('defaultFileStorage')->defaultNull();
 
         $root->scalarNode('application')->defaultValue('API');
         $root->scalarNode('description')->defaultNull();

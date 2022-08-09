@@ -5,6 +5,8 @@ namespace Ellinaut\ElliRPCBundle;
 use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\DetectableProcedureProcessorPass;
 use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\ErrorFactoryPass;
 use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\ErrorTranslatorPass;
+use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\FileLocatorPass;
+use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\FilesystemPass;
 use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\ProcedureProcessorPass;
 use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\ProcedureValidatorPass;
 use Ellinaut\ElliRPCBundle\DependencyInjection\Compiler\TransactionListenerPass;
@@ -27,5 +29,7 @@ class ElliRPCBundle extends Bundle
         $container->addCompilerPass(new TransactionListenerPass());
         $container->addCompilerPass(new ErrorFactoryPass());
         $container->addCompilerPass(new ErrorTranslatorPass());
+        $container->addCompilerPass(new FileLocatorPass());
+        $container->addCompilerPass(new FilesystemPass());
     }
 }

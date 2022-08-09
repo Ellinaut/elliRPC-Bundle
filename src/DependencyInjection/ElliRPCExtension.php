@@ -14,10 +14,16 @@ use Ellinaut\ElliRPC\Error\Translator\ErrorTranslatorChain;
 use Ellinaut\ElliRPC\Error\Translator\ErrorTranslatorInterface;
 use Ellinaut\ElliRPC\File\Bridge\SymfonyContentTypeGuesser;
 use Ellinaut\ElliRPC\File\Bridge\SymfonyFilesystem;
+use Ellinaut\ElliRPC\File\ChainableFileLocator;
+use Ellinaut\ElliRPC\File\ChainableFilesystem;
 use Ellinaut\ElliRPC\File\ContentTypeGuesserInterface;
-use Ellinaut\ElliRPC\File\DefaultFileLocator;
+use Ellinaut\ElliRPC\File\FileLocatorChain;
 use Ellinaut\ElliRPC\File\FileLocatorInterface;
+use Ellinaut\ElliRPC\File\FilesystemChain;
 use Ellinaut\ElliRPC\File\FilesystemInterface;
+use Ellinaut\ElliRPC\File\LocalBasePathFileLocator;
+use Ellinaut\ElliRPC\File\UnresolvedFileLocator;
+use Ellinaut\ElliRPC\File\UnsupportedFilesystem;
 use Ellinaut\ElliRPC\FileHandler;
 use Ellinaut\ElliRPC\Procedure\Processor\ProcedureProcessorInterface;
 use Ellinaut\ElliRPC\Procedure\Transaction\TransactionListenerInterface;
@@ -36,6 +42,7 @@ use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 /**
@@ -43,11 +50,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
  */
 class ElliRPCExtension extends ConfigurableExtension
 {
-    public function getConfiguration(array $config, ContainerBuilder $container): Configuration
-    {
-        return new Configuration($container->getParameter('kernel.project_dir'));
-    }
-
     /**
      * @param array $mergedConfig
      * @param ContainerBuilder $container
@@ -101,16 +103,42 @@ class ElliRPCExtension extends ConfigurableExtension
         ##############################################################
         ### File Utilities
         ##############################################################
+        $container->registerForAutoconfiguration(ChainableFileLocator::class)
+            ->addTag('elli_rpc.file_locator');
+
         if (!$container->hasDefinition(FileLocatorInterface::class)) {
-            $container->autowire(DefaultFileLocator::class)
-                ->setArgument('$localBasePath', $mergedConfig['defaultFileStorage'])
-                ->setPublic(false);
-            $container->setAlias(FileLocatorInterface::class, DefaultFileLocator::class);
+            if ($mergedConfig['defaultFileStorage']) {
+                $container->autowire(LocalBasePathFileLocator::class)
+                    ->setArgument('$localBasePath', $mergedConfig['defaultFileStorage'])
+                    ->setPublic(false);
+                $container->autowire(FileLocatorChain::class)
+                    ->setArgument('$fallback', new Reference(LocalBasePathFileLocator::class))
+                    ->setPublic(false);
+            } else {
+                $container->autowire(UnresolvedFileLocator::class)
+                    ->setPublic(false);
+                $container->autowire(FileLocatorChain::class)
+                    ->setArgument('$fallback', new Reference(UnresolvedFileLocator::class))
+                    ->setPublic(false);
+            }
+
+            $container->setAlias(FileLocatorInterface::class, FileLocatorChain::class);
         }
 
+        $container->registerForAutoconfiguration(ChainableFilesystem::class)
+            ->addTag('elli_rpc.filesystem');
+
         if (!$container->hasDefinition(FilesystemInterface::class)) {
-            $container->autowire(SymfonyFilesystem::class)->setPublic(false);
-            $container->setAlias(FilesystemInterface::class, SymfonyFilesystem::class);
+            if ($mergedConfig['enableFileStorage']) {
+                $container->autowire(SymfonyFilesystem::class)->setPublic(false);
+                $container->autowire(FilesystemChain::class)
+                    ->setArgument('$fallback', new Reference(SymfonyFilesystem::class))
+                    ->setPublic(false);
+                $container->setAlias(FilesystemInterface::class, FilesystemChain::class);
+            } else {
+                $container->autowire(UnsupportedFilesystem::class)->setPublic(false);
+                $container->setAlias(FilesystemInterface::class, UnsupportedFilesystem::class);
+            }
         }
 
         if (!$container->hasDefinition(ContentTypeGuesserInterface::class)) {

@@ -2,21 +2,21 @@
 
 namespace Ellinaut\ElliRPCBundle\DependencyInjection\Compiler;
 
-use Ellinaut\ElliRPC\Procedure\Transaction\TransactionManagerInterface;
+use Ellinaut\ElliRPC\File\FileLocatorChain;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Philipp Marien
  */
-class TransactionListenerPass extends AbstractCompilerPass
+class FileLocatorPass extends AbstractCompilerPass
 {
     /**
      * @return string
      */
     protected function getServiceId(): string
     {
-        return TransactionManagerInterface::class;
+        return FileLocatorChain::class;
     }
 
     /**
@@ -24,7 +24,7 @@ class TransactionListenerPass extends AbstractCompilerPass
      */
     protected function getTagName(): string
     {
-        return 'elli_rpc.transaction_listener';
+        return 'elli_rpc.file_locator';
     }
 
     /**
@@ -35,7 +35,7 @@ class TransactionListenerPass extends AbstractCompilerPass
     protected function modifyDefinition(Definition $definition, string $serviceId, array $config): void
     {
         $definition->addMethodCall(
-            'registerListener',
+            'add',
             [
                 new Reference($serviceId),
             ]

@@ -2,10 +2,7 @@
 
 namespace Ellinaut\ElliRPCBundle\DependencyInjection\Compiler;
 
-use Ellinaut\ElliRPC\Error\Factory\ErrorFactoryChain;
 use Ellinaut\ElliRPC\Error\Translator\ErrorTranslatorChain;
-use Ellinaut\ElliRPC\Procedure\Processor\ProcedureProcessorRegistry;
-use Ellinaut\ElliRPC\Procedure\Validator\ProcedureValidatorChain;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
