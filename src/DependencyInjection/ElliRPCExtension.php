@@ -43,6 +43,7 @@ use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 /**
@@ -129,11 +130,13 @@ class ElliRPCExtension extends ConfigurableExtension
             ->addTag('elli_rpc.filesystem');
 
         $container->autowire(UnsupportedFilesystem::class)->setPublic(false);
-        $container->autowire(SymfonyFilesystem::class)->setPublic(false);
+        if ($container->hasDefinition(Filesystem::class)) {
+            $container->autowire(SymfonyFilesystem::class)->setPublic(false);
+        }
 
         if (!$container->hasDefinition(FilesystemInterface::class)) {
             if ($mergedConfig['files']['enabled']) {
-                if ($mergedConfig['files']['localPath']) {
+                if ($mergedConfig['files']['enableFallback'] && $container->hasDefinition(SymfonyFilesystem::class)) {
                     $container->autowire(FilesystemChain::class)
                         ->setArgument('$fallback', new Reference(SymfonyFilesystem::class))
                         ->setPublic(false);

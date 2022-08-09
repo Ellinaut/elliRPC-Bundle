@@ -27,6 +27,7 @@ class Configuration implements ConfigurationInterface
 
         $files = $root->arrayNode('files')->addDefaultsIfNotSet()->children();
         $files->booleanNode('enabled')->defaultFalse();
+        $files->booleanNode('enableFallback')->defaultFalse();
         $files->scalarNode('localPath')->defaultNull();
 
         $root->scalarNode('application')->defaultValue('API');
