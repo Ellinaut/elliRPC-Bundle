@@ -109,7 +109,7 @@ class ElliRPCExtension extends ConfigurableExtension
         if (!$container->hasDefinition(FileLocatorInterface::class)) {
             if ($mergedConfig['files']['localPath']) {
                 $container->autowire(LocalPathLocator::class)
-                    ->setArgument('$localBasePath', $mergedConfig['files']['localPath'])
+                    ->setArgument('$localPath', $mergedConfig['files']['localPath'])
                     ->setPublic(false);
                 $container->autowire(FileLocatorChain::class)
                     ->setArgument('$fallback', new Reference(LocalPathLocator::class))
