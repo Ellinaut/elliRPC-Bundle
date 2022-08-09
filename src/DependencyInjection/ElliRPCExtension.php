@@ -136,7 +136,7 @@ class ElliRPCExtension extends ConfigurableExtension
 
         if (!$container->hasDefinition(FilesystemInterface::class)) {
             if ($mergedConfig['files']['enabled']) {
-                if ($mergedConfig['files']['enableFallback'] && $container->hasDefinition(SymfonyFilesystem::class)) {
+                if ($mergedConfig['files']['enableFallback']) {
                     $container->autowire(FilesystemChain::class)
                         ->setArgument('$fallback', new Reference(SymfonyFilesystem::class))
                         ->setPublic(false);
