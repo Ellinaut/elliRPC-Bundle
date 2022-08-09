@@ -10,22 +10,10 @@
            controller="Ellinaut\ElliRPCBundle\Controller\DefinitionController::getDocumentation"
     />
 
-    <route id="elliRPC.get_documentation.options"
-           path="/definitions"
-           methods="OPTIONS"
-           controller="Ellinaut\ElliRPCBundle\Controller\CORSController::respondSuccess"
-    />
-
     <route id="elliRPC.get_package_definition"
            path="/definitions/{packageName}"
            methods="GET"
            controller="Ellinaut\ElliRPCBundle\Controller\DefinitionController::getPackageDefinition"
-    />
-
-    <route id="elliRPC.get_package_definition.options"
-           path="/definitions/{packageName}"
-           methods="OPTIONS"
-           controller="Ellinaut\ElliRPCBundle\Controller\CORSController::respondSuccess"
     />
 
     <route id="elliRPC.execute_procedure"
@@ -46,18 +34,12 @@
            controller="Ellinaut\ElliRPCBundle\Controller\ProcedureController::executeTransaction"
     />
 
-    <route id="elliRPC.execute.options"
-           path="/procedures/{type}"
-           methods="OPTIONS"
-           controller="Ellinaut\ElliRPCBundle\Controller\CORSController::respondSuccess"
-    />
-
     <route id="elliRPC.get_file"
            path="/files/{fileName}"
            methods="GET"
            controller="Ellinaut\ElliRPCBundle\Controller\FileController::getFile"
     >
-        <requirement key="file">.+</requirement>
+        <requirement key="fileName">.+</requirement>
     </route>
 
     <route id="elliRPC.upload_file"
@@ -65,7 +47,7 @@
            methods="POST|PUT"
            controller="Ellinaut\ElliRPCBundle\Controller\FileController::uploadFile"
     >
-        <requirement key="file">.+</requirement>
+        <requirement key="fileName">.+</requirement>
     </route>
 
     <route id="elliRPC.delete_file"
@@ -73,12 +55,6 @@
            methods="DELETE"
            controller="Ellinaut\ElliRPCBundle\Controller\FileController::deleteFile"
     >
-        <requirement key="file">.+</requirement>
+        <requirement key="fileName">.+</requirement>
     </route>
-
-    <route id="elliRPC.file.options"
-           path="/files/{fileName}"
-           methods="OPTIONS"
-           controller="Ellinaut\ElliRPCBundle\Controller\CORSController::respondSuccess"
-    />
 </routes>
