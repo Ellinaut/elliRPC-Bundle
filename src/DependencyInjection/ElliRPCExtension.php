@@ -42,6 +42,7 @@ use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
@@ -137,6 +138,9 @@ class ElliRPCExtension extends ConfigurableExtension
         if (!$container->hasDefinition(FilesystemInterface::class)) {
             if ($mergedConfig['files']['enabled']) {
                 if ($mergedConfig['files']['enableFallback']) {
+                    if (!$container->hasDefinition(SymfonyFilesystem::class)) {
+                        throw new InvalidArgumentException('Run `composer req symfony/filesystem` to enable the filesystem fallback.');
+                    }
                     $container->autowire(FilesystemChain::class)
                         ->setArgument('$fallback', new Reference(SymfonyFilesystem::class))
                         ->setPublic(false);
