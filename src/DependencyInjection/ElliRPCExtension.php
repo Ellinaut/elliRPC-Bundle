@@ -128,15 +128,23 @@ class ElliRPCExtension extends ConfigurableExtension
         $container->registerForAutoconfiguration(ChainableFilesystem::class)
             ->addTag('elli_rpc.filesystem');
 
+        $container->autowire(UnsupportedFilesystem::class)->setPublic(false);
+        $container->autowire(SymfonyFilesystem::class)->setPublic(false);
+
         if (!$container->hasDefinition(FilesystemInterface::class)) {
             if ($mergedConfig['enableFileStorage']) {
-                $container->autowire(SymfonyFilesystem::class)->setPublic(false);
-                $container->autowire(FilesystemChain::class)
-                    ->setArgument('$fallback', new Reference(SymfonyFilesystem::class))
-                    ->setPublic(false);
+                if ($mergedConfig['defaultFileStorage']) {
+                    $container->autowire(FilesystemChain::class)
+                        ->setArgument('$fallback', new Reference(SymfonyFilesystem::class))
+                        ->setPublic(false);
+                } else {
+                    $container->autowire(FilesystemChain::class)
+                        ->setArgument('$fallback', new Reference(UnsupportedFilesystem::class))
+                        ->setPublic(false);
+                }
+
                 $container->setAlias(FilesystemInterface::class, FilesystemChain::class);
             } else {
-                $container->autowire(UnsupportedFilesystem::class)->setPublic(false);
                 $container->setAlias(FilesystemInterface::class, UnsupportedFilesystem::class);
             }
         }
