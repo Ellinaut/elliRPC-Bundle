@@ -25,8 +25,9 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('elli_rpc');
         $root = $treeBuilder->getRootNode()->children();
 
-        $root->booleanNode('enableFileStorage')->defaultFalse();
-        $root->scalarNode('defaultFileStorage')->defaultNull();
+        $files = $root->arrayNode('files')->addDefaultsIfNotSet()->children();
+        $files->booleanNode('enabled')->defaultFalse();
+        $files->scalarNode('localPath')->defaultNull();
 
         $root->scalarNode('application')->defaultValue('API');
         $root->scalarNode('description')->defaultNull();

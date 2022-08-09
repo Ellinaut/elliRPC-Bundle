@@ -21,7 +21,7 @@ use Ellinaut\ElliRPC\File\FileLocatorChain;
 use Ellinaut\ElliRPC\File\FileLocatorInterface;
 use Ellinaut\ElliRPC\File\FilesystemChain;
 use Ellinaut\ElliRPC\File\FilesystemInterface;
-use Ellinaut\ElliRPC\File\LocalBasePathFileLocator;
+use Ellinaut\ElliRPC\File\LocalPathLocator;
 use Ellinaut\ElliRPC\File\UnresolvedFileLocator;
 use Ellinaut\ElliRPC\File\UnsupportedFilesystem;
 use Ellinaut\ElliRPC\FileHandler;
@@ -107,12 +107,12 @@ class ElliRPCExtension extends ConfigurableExtension
             ->addTag('elli_rpc.file_locator');
 
         if (!$container->hasDefinition(FileLocatorInterface::class)) {
-            if ($mergedConfig['defaultFileStorage']) {
-                $container->autowire(LocalBasePathFileLocator::class)
-                    ->setArgument('$localBasePath', $mergedConfig['defaultFileStorage'])
+            if ($mergedConfig['files']['localPath']) {
+                $container->autowire(LocalPathLocator::class)
+                    ->setArgument('$localBasePath', $mergedConfig['files']['localPath'])
                     ->setPublic(false);
                 $container->autowire(FileLocatorChain::class)
-                    ->setArgument('$fallback', new Reference(LocalBasePathFileLocator::class))
+                    ->setArgument('$fallback', new Reference(LocalPathLocator::class))
                     ->setPublic(false);
             } else {
                 $container->autowire(UnresolvedFileLocator::class)
@@ -132,8 +132,8 @@ class ElliRPCExtension extends ConfigurableExtension
         $container->autowire(SymfonyFilesystem::class)->setPublic(false);
 
         if (!$container->hasDefinition(FilesystemInterface::class)) {
-            if ($mergedConfig['enableFileStorage']) {
-                if ($mergedConfig['defaultFileStorage']) {
+            if ($mergedConfig['files']['enabled']) {
+                if ($mergedConfig['files']['localPath']) {
                     $container->autowire(FilesystemChain::class)
                         ->setArgument('$fallback', new Reference(SymfonyFilesystem::class))
                         ->setPublic(false);
