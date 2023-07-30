@@ -5,7 +5,7 @@
   "require": {
     "php": ">=8.1",
     "symfony/framework-bundle": "^5.0|^6.0",
-    "ellinaut/ellirpc": "dev-main@dev",
+    "ellinaut/ellirpc": "^1.0",
     "symfony/psr-http-message-bridge": "^2.0"
   },
   "license": "MIT",

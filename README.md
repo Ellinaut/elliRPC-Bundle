@@ -7,8 +7,7 @@ Symfony bundle to integrate the elliRPC library into a symfony 5 project.
 3. How to configure?
     1. Routing
     2. File Storage
-    3. CORS
-    4. API-Definition
+    3. API-Definition
 4. How to provide implementations?
     1. Procedure Validator
     2. Procedure Processor
@@ -66,17 +65,6 @@ You can change it via configuration:
 ```yaml
 elli_rpc:
   defaultFileStorage: '%kernel.project_dir%/apiFiles'
-```
-
-### CORS
-
-If your application should be accessible for frontend applications with different hostnames you have to allow CORS.
-To allow it for `*` add the following snippet to your configuration. If you want to configure it more detailed write
-your own event listener for `kernel.request` or use any external CORS bundle.
-
-```yaml
-elli_rpc:
-  allowCORS: true
 ```
 
 ### API-Definition
